@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script can copy files (in argument) to remote server
 # $# returns the number of arguments.
 # $@ return the list of arguments
 # dirname /tmp/VMwareTools-10.3.10-12406962.tar.gz returns /tmp
