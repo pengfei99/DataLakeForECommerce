@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script allows you to start stop, and check status of our nodes in a zookeeper cluster. The user who run this
+# This script allows you to start stop, and check status of all nodes in a zookeeper cluster. The user who run this
 # script needs to have ssh access to the zk nodes
 
 # where your zookeeper bin is installed, in this example we suppose it's in /opt/module/zookeeper-3.5.7
@@ -18,7 +18,7 @@ case $1 in
 "start")
 for i in "${hosts[@]}"
 do
-  echo "-------------------- start $i -----------------------"
+  echo "-------------------- start zk process on $i -----------------------"
   ssh $i "${base_dir}/bin/zkServer.sh start"
 done
 ;;
@@ -26,7 +26,7 @@ done
 "stop")
 for i in "${hosts[@]}"
 do
-  echo "-------------------- stop $i -----------------------"
+  echo "-------------------- stop zk process on $i -----------------------"
   ssh $i "${base_dir}/bin/zkServer.sh stop"
 done
 ;;
@@ -34,7 +34,7 @@ done
 "status")
 for i in "${hosts[@]}"
 do
-  echo "-------------------- $i status -----------------------"
+  echo "-------------------- check zk process status on $i  -----------------------"
   ssh $i "${base_dir}/bin/zkServer.sh status"
 done
 ;;
