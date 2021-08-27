@@ -6,7 +6,7 @@
 base_dir="/opt/module/kafka-2.8.0"
 # we suppose we have three nodes in the cluster (e.g. lin01, lin02, lin03), To adapte this script you need to change
 # the below hosts list
-# Declare an array of string for zk nodes hostname in the cluster
+# Declare an array of string for kafka nodes hostname in the cluster
 declare -a hosts=("lin01" "lin02" "lin03")
 
 if [ "$#" -ne 1 ]; then
