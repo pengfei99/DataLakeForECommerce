@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-flume
+spec:
+  tls:
+    - hosts:
+        - flume-test.kub.sspcloud.fr
+  rules:
+    - host: flume-test.kub.sspcloud.fr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flume-test-agent
+                port: 
+                  number: 44123

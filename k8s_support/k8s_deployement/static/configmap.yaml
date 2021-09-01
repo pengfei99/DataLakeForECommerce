@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flume-config
+data:
+  core-site.xml: |
+    <configuration>
+    <property>
+      <name>fs.s3a.connection.ssl.enabled</name>
+      <value>true</value>
+      <description>Enables or disables SSL connections to S3.</description>
+    </property>
+
+    <property>
+      <name>fs.s3a.endpoint</name>
+      <description>AWS S3 endpoint to connect to. An up-to-date list is
+        provided in the AWS Documentation: regions and endpoints. Without this
+        property, the standard region (s3.amazonaws.com) is assumed.
+      </description>
+      <value>minio.lab.sspcloud.fr</value>
+    </property>
+
+    <property>
+      <name>fs.s3a.path.style.access</name>
+      <value>true</value>
+      <description>Enable S3 path style access ie disabling the default virtual hosting behaviour.
+        Useful for S3A-compliant storage providers as it removes the need to set up DNS for virtual hosting.
+      </description>
+    </property>
+
+    <property>
+      <name>fs.s3a.aws.credentials.provider</name>
+      <value>org.apache.hadoop.fs.s3a.TemporaryAWSCredentialsProvider</value>
+    </property>
+
+    <property>
+      <name>fs.s3a.access.key</name>
+      <value></value>
+    </property>
+
+    <property>
+      <name>fs.s3a.secret.key</name>
+      <value></value>
+    </property>
+
+    <property>
+      <name>fs.s3a.session.token</name>
+      <value></value>
+    </property>
+
+    </configuration>
+
+  agent.conf: |
+    a1.sources = r1
+    a1.sinks = k1
+    a1.channels = c1
+
+    # Describe/configure the source
+    a1.sources.r1.type = netcat
+    a1.sources.r1.bind = localhost
+    a1.sources.r1.port = 44444
+
+    # Describe the sink
+    a1.sinks.k1.type = logger
+
+    # Use a channel which buffers events in memory
+    a1.channels.c1.type = memory
+    a1.channels.c1.capacity = 1000
+    a1.channels.c1.transactionCapacity = 100
+
+    # Bind the source and sink to the channel
+    a1.sources.r1.channels = c1
+    a1.sinks.k1.channel = c1

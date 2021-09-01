@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flume-test-agent
+  labels:
+    app: flume
+    chart: flume-0.1.0
+    release: flume-test
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 44123
+      targetPort: 44123
+      protocol: TCP
+      name: flume
+  selector:
+    app: flume
+    release: flume-test
