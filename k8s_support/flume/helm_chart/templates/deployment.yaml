@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "flume.fullname" . }}
+  labels:
+    {{- include "flume.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "flume.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "flume.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "flume.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command: [
+              "/bin/bash",
+              "-c",
+              "${FLUME_HOME}/bin/flume-ng agent -n a1 -c conf -f ${FLUME_HOME}/conf/agent.conf -Dflume.root.logger=INFO,console -Dflume.monitoring.type=http -Dflume.monitoring.port=44123"
+                    ]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.name }}: {{ .Values.image.tag}}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 44123
+              protocol: TCP
+          volumeMounts:
+          - name: flume-config
+            mountPath: /opt/apache-flume/conf/core-site.xml
+            subPath: core-site.xml
+          - name: flume-config
+            mountPath: /opt/apache-flume/conf/agent.conf
+            subPath: agent.conf
+          - name: flume-data-volume
+            mountPath: /opt/apache-flume/data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: flume-config
+          configMap:
+            name: {{ .Release.Name }}-flume-cm
+        - name: flume-data-volume
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-flume-data-claim

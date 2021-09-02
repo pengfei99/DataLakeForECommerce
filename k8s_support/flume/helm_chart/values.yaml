@@ -1,0 +1,87 @@
+############### Values for configMap core-site s3 creds ########################
+flumeApp:
+  s3:
+    accessKey:
+    secretKey:
+    sessionToken:
+
+############### Values for deployment ######################
+image:
+  name: liupengfei99/flume
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.9.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+#   memory: 128Mi
+
+############### Values for pvc ####################
+pvc:
+  accessModes: [ReadWriteOnce]
+  volumeMode: Filesystem
+  storage: 8Gi
+  storageClassName: rook-ceph-block
+
+############### Values for service #################
+service:
+  type: ClusterIP
+  port: 44123
+  targetPort: 44123
+
+##############  Values for ingress ###############
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: flume.lab.sspcloud.fr
+      paths: [/metrics]
+  tls:
+    - hosts:
+        - flume.lab.sspcloud.fr
+    # secretName: chart-example-tls
+
+
+
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
