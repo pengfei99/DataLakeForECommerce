@@ -49,8 +49,9 @@ data:
      </property>
      </configuration>
 
+{{/* This file include mecanishm requires the inclueded file must be a .toml. so not intresting */}}
   {{- $files := .Files }}
   {{- range tuple "agent.conf" }}
-  {{ . }}: |-
+  {{ . }} : |-
   {{ $files.Get . }}
   {{- end }}
