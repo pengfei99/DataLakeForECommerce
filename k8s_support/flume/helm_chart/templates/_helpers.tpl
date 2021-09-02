@@ -26,7 +26,7 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "atlas.chart" -}}
+{{- define "flume.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -53,9 +53,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "atlas.serviceAccountName" -}}
+{{- define "flume.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "atlas.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "flume.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
