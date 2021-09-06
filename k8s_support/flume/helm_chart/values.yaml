@@ -1,9 +1,9 @@
 ############### Values for configMap core-site s3 creds ########################
 flumeApp:
   s3:
-    accessKey:
-    secretKey:
-    sessionToken:
+    accessKey: pengfeiS3accessKey
+    secretKey: pengfeiS3secretKey
+    sessionToken: pengfeiS3sessionToken
 
 ############### Values for deployment ######################
 image:

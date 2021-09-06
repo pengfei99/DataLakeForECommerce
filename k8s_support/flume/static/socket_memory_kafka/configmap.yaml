@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-flume-cm
+  name: flume-config
 data:
-  core-site.xml: |-
+  core-site.xml: |
     <configuration>
     <property>
       <name>fs.s3a.connection.ssl.enabled</name>
@@ -35,23 +35,44 @@ data:
 
     <property>
       <name>fs.s3a.access.key</name>
-      <value>{{ .Values.flumeApp.s3.accessKey }}</value>
+      <value></value>
     </property>
 
     <property>
       <name>fs.s3a.secret.key</name>
-      <value>{{ .Values.flumeApp.s3.secretKey }}</value>
-     </property>
+      <value></value>
+    </property>
 
-     <property>
+    <property>
       <name>fs.s3a.session.token</name>
-      <value>{{ .Values.flumeApp.s3.sessionToken }}</value>
-     </property>
-     </configuration>
+      <value></value>
+    </property>
 
-{{/* This file include mecanishm requires the inclueded file must be a .toml. so not intresting */}}
-  {{- $files := .Files }}
-  {{- range tuple "agent.toml" }}
-  {{ . }} : |-
-  {{ $files.Get . }}
-  {{- end }}
+    </configuration>
+
+  agent.conf: |
+    a1.sources = r1
+    a1.sinks = k1
+    a1.channels = c1
+
+    # Describe/configure the source
+    a1.sources.r1.type = netcat
+    a1.sources.r1.bind = localhost
+    a1.sources.r1.port = 44444
+
+    # Describe the sink
+    a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink
+    a1.sinks.k1.kafka.topic = test-topic
+    a1.sinks.k1.kafka.bootstrap.servers = 10.233.53.119:9092
+    a1.sinks.k1.kafka.flumeBatchSize = 20
+    a1.sinks.k1.kafka.producer.acks = 1
+    a1.sinks.k1.kafka.producer.linger.ms = 1
+
+    # Use a channel which buffers events in memory
+    a1.channels.c1.type = memory
+    a1.channels.c1.capacity = 1000
+    a1.channels.c1.transactionCapacity = 100
+
+    # Bind the source and sink to the channel
+    a1.sources.r1.channels = c1
+    a1.sinks.k1.channel = c1
