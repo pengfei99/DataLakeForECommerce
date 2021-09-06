@@ -1,0 +1,10 @@
+# As there is already a helm chart provided by bitnami, so we don't need to write it by ourselves.
+# You can find the helm chart source from https://github.com/bitnami/charts/tree/master/bitnami/kafka
+apiVersion: v2
+name: kafka
+version: 1.0.0
+dependencies:
+  - name: kafka
+    version: 14.0.5
+    repository: https://charts.bitnami.com/bitnami
+    enabled: true

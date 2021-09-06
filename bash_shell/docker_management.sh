@@ -7,3 +7,4 @@ sudo docker ps -a | grep -v CONTAINER |awk '{print $1}' | xargs -n1 sudo docker 
 
 # remove all image with repository and tag as <none>
 sudo docker image list | grep \<none\> | awk '{print $3}' | xargs -n1 sudo docker rmi
+

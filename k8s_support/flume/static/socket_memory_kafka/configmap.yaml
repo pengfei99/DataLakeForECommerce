@@ -61,6 +61,7 @@ data:
     a1.sources.r1.port = 44444
 
     # Describe the sink
+    # in this example, we use kafka sink
     a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink
     a1.sinks.k1.kafka.topic = test-topic
     a1.sinks.k1.kafka.bootstrap.servers = 10.233.53.119:9092

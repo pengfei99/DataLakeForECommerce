@@ -129,3 +129,12 @@ dmypy.json
 .pyre/
 .idea/
 
+# Common backup files
+*.swp
+*.bak
+*.tmp
+
+# dependencies chart
+*.tgz
+*.lock
+
